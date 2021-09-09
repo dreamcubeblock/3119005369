@@ -1,0 +1,17 @@
+certifi==2021.5.30
+click==8.0.1
+colorama==0.4.4
+Cython==0.29.23
+gensim==4.1.0
+importlib-metadata==4.8.1
+jieba==0.42.1
+joblib==1.0.1
+nltk==3.6.2
+numpy==1.21.2
+regex==2021.8.28
+scipy==1.7.1
+smart-open==5.2.1
+tqdm==4.62.2
+typing-extensions==3.10.0.2
+wincertstore==0.2
+zipp==3.5.0
