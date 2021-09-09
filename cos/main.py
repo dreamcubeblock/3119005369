@@ -30,3 +30,9 @@ if __name__ == '__main__':
     text2 = filter(str2)
 
     sim=calc_similarity(text1,text2)
+    print("重复率："+str(round(sim,2)))
+    realrootname=sys.argv[1].split("/")[-1]
+    rootname=sys.argv[2].split("/")[-1]
+    #print(rootname)
+    with open(sys.argv[3],"a") as f:
+            f.write(realrootname+" and "+rootname+":"+str(round(sim,2))+"\n")
