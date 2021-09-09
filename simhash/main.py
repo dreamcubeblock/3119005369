@@ -91,12 +91,18 @@ if __name__ == '__main__':
     seg=jieba.cut(copy_txt)
     string2=string2.join(seg)
     line2 = re.sub(r"[{}]+".format(punc), "", string2)
-    print(line2)
-    print(line1)
+  #  print(line2)
+   # print(line1)
     hash1=simhash(line1.split())
     hash2=simhash(line2.split())
-    print(hash2.hammingDis(hash1))
-   
-    #with open(sys.argv[3],"a") as f:
-    #        f.write(str(result)+"\n")
+    result=hash2.hammingDis(hash1)
+    print("相似距离:"+str(result)+"\n")
+    if result<=3:
+        print("相似")
+    else:
+        print("不相似")
+    realrootname=sys.argv[1].split("/")[-1]
+    rootname=sys.argv[2].split("/")[-1]
+    with open(sys.argv[3],"a") as f:
+            f.write(realrootname+" and "+rootname+":"+str(result)+"\n")
     #        f.write(str(result)+"\n")
