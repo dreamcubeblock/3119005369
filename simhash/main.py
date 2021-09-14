@@ -1,8 +1,9 @@
 import numpy as np
 import sys 
 import re
-
+import time
 import jieba
+import os
 import jieba.analyse
 class simhash:
     def __init__(self,content):
@@ -12,12 +13,11 @@ class simhash:
         return str(self.simhash)
 
     def simhash(self,content):
-        #seg = jieba.cut(content)
-        #jieba.analyse.set_stop_words('stopword.txt')
+
         keyWord = jieba.analyse.extract_tags(
-            '|'.join(content), topK=10, withWeight=True, allowPOS=())#在这里对jieba的tfidf.py进行了修改
-        #将tags = sorted(freq.items(), key=itemgetter(1), reverse=True)修改成tags = sorted(freq.items(), key=itemgetter(1,0), reverse=True)
-        #即先按照权重排序，再按照词排序
+            '|'.join(content), topK=10, withWeight=True, allowPOS=())
+
+      #  print(keyWord)
         keyList = []
         for feature, weight in keyWord:
             weight = int(weight * 10)
@@ -31,7 +31,7 @@ class simhash:
             # print(temp)
             keyList.append(temp)
         list1 = np.sum(np.array(keyList), axis=0)
-        #print(list1)
+     #   print(list1)
         if(keyList==[]): #编码读不出来
             return '00'
         simhash = ''
@@ -76,6 +76,10 @@ class simhash:
         return i
 
 if __name__ == '__main__':
+    assert len(sys.argv)==4,"输入不符合规范，缺少文件目录"
+    assert os.path.exists(sys.argv[1]),"原文文件不存在，请检查文件目录是否正确"
+    assert os.path.exists(sys.argv[2]),"抄袭文件不存在，请检查文件目录是否正确"
+   # start = time.clock()
     punc = './ <>_ - - = ", 。，？！“”：‘’@#￥% … &×（）——+【】{};；● &～| \s:'
     real_txt=open(sys.argv[1],encoding='utf8')
     string1=''
@@ -83,7 +87,9 @@ if __name__ == '__main__':
     copy_txt=open(sys.argv[2],encoding='utf8')
     real_txt=real_txt.read()
     copy_txt=copy_txt.read()
+    #print(copy_txt)
     real_txt = re.sub(r'[^\w]+', '',real_txt)
+
     seg=jieba.cut(real_txt)
     string1=string1.join(seg)
     line1 = re.sub(r"[{}]+".format(punc), "", string1)
@@ -91,7 +97,7 @@ if __name__ == '__main__':
     seg=jieba.cut(copy_txt)
     string2=string2.join(seg)
     line2 = re.sub(r"[{}]+".format(punc), "", string2)
-  #  print(line2)
+    #print(line2)
    # print(line1)
     hash1=simhash(line1.split())
     hash2=simhash(line2.split())
@@ -106,3 +112,5 @@ if __name__ == '__main__':
     with open(sys.argv[3],"a") as f:
             f.write(realrootname+" and "+rootname+":"+str(result)+"\n")
     #        f.write(str(result)+"\n")
+    #end = time.clock()
+   # print("final is in ", end - start)
